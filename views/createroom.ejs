@@ -1,0 +1,26 @@
+<%- include("mainhead") -%>
+
+
+<script src="/javaScript/createlivequiz.js"></script>
+<div class="starter-template" style="margin-top: 5vh;">
+    <h2>Enter Quiz-ID to Prepare live quiz</h2>
+        <table>
+            <tr>
+                <td>
+                    <label style="margin-bottom: 0;"><h4 style="margin-bottom: 0; margin-right: 15px;">Quiz-ID: </h4></label>
+                </td>
+                <td>
+                    <input type="text" class="form-control" width="50px" id = 'rid'>
+                </td>
+                <td><button class="btn-success btn" style="margin-left: 5px;" onclick="createroom()">Join Quiz</button></td>
+            </tr>
+        </table>
+</div>
+
+
+
+<input type="text" id = "msg">
+<button onclick = "sendmsg()">Send</button>
+<button onclick="start()">Start</button>
+
+<%- include("mainfooter")-%>

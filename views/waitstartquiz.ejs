@@ -1,0 +1,69 @@
+<%- include("mainhead") -%>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    var room = '<%= roomid %>';
+    socket.emit('createRoom',room);
+</script>
+
+<div class="">
+    <label><h2>Select evaluation scheam</h2></label><br>
+    <input type="radio" name="markSchem" value="one">
+    <label><h5>1 Point for correct answer</h5></label><br>
+    <input type="radio" name="markSchem" value="fast">
+    <label><h5>Fastest finger first</h5></label><br>
+    
+</div>
+<hr class="main-divd">
+<center>
+    <label style="margin: 5px;"><h3>Joined List</h3></label>
+</center>
+<div class="quiz-join-list">
+</div>
+
+<div class="start-cont" style="display: inline-flex; justify-content: space-evenly;">
+    <div class="start-time" style="margin-right: 30px;">
+        <button class="btn-success btn" onclick="start()">Start Now</button>
+    </div>
+    <div class="start" style="margin-left: 30px;">
+        <input type="number" id="hours" name="hours" min="0" max="23" style="width: 3em;" required><label id="tim">H</label>
+        <input type="number" id="minutes" name="minutes" min="0" max="59" style="width: 3em;" required><label id="tim">M</label>
+        <button class="btn btn-primary">Start on time</button>
+    </div>
+</div>
+
+  
+<script>
+
+function prependItem(join){
+    const member = document.createElement('lable');
+    member.setAttribute('id',join.id);
+    member.setAttribute("style","width: 100%; margin: 5px; margin-left: 5%;")
+    member.innerHTML = '<strong>' + join.name + '</strong>(' + join.id + ')<br>';
+    document.getElementsByClassName('quiz-join-list')[0].prepend(member);
+}
+
+    socket.on('removeFromWaitList',(mid) => {
+        console.log(mid);
+        document.getElementsByClassName('quiz-join-list')[0].querySelector("#"+mid).remove();
+    })
+
+function start(){
+    socket.emit('start',room);
+}
+
+
+
+socket.on('roomCreateMsg',(msg) =>{
+    alert(msg);
+});
+
+socket.on("joinlistmem",(join) => {
+    console.log(join);
+    prependItem(join);
+});
+
+</script>
+
+
+<%- include("mainfooter")-%>
