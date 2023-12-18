@@ -42,8 +42,20 @@ const quizIDs = mongoose.model(
   mongoose.Schema({}, { strict: false })
 );
 
+var dbConnector = "mongodb://127.0.0.1:27017/usersDB";
+
+const port = process.env.PORT || 3000;
+
+server.listen(port, () => {
+  if (port == process.env.PORT)
+    dbConnector =
+      "mongodb+srv://ajay:ajay@cluster0.vs7hhac.mongodb.net/usersDB?retryWrites=true&w=majority";
+  console.log(dbConnector);
+  console.log("Server running on port 3000");
+});
+
 mongoose
-  .connect("mongodb://127.0.0.1:27017/usersDB", {
+  .connect(dbConnector, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -432,8 +444,6 @@ app.post("/validate-login-otp", (req, res) => {
   }
 });
 
-server.listen(3000, () => console.log("Server running on port 3000"));
-
 //live Quiz
 
 app.use(
@@ -474,7 +484,6 @@ app.post("/check-live-quiz", async (req, res) => {
 });
 
 app.get("/take-live-quiz", (req, res) => {
- 
   const usr = req.cookies.userName;
   if (!usr) {
     res.redirect("/login");
