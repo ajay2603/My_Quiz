@@ -42,14 +42,14 @@ const quizIDs = mongoose.model(
   mongoose.Schema({}, { strict: false })
 );
 
-var dbConnector = "mongodb://127.0.0.1:27017/usersDB";
+var dbConnector =
+  "mongodb+srv://ajay:ajay@cluster0.vs7hhac.mongodb.net/usersDB?retryWrites=true&w=majority";
 
 const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
   if (port == process.env.PORT)
-    dbConnector =
-      "mongodb+srv://ajay:ajay@cluster0.vs7hhac.mongodb.net/usersDB?retryWrites=true&w=majority";
+    dbConnector = "mongodb://127.0.0.1:27017/usersDB";
   console.log(dbConnector);
   console.log("Server running on port 3000");
 });
