@@ -8,11 +8,6 @@ socket.on('roomCreateMsg',(msg) =>{
 })
 
 
-async function createroom(){
-    var roomid = document.getElementById('rid').value;
-    
-}
-
 async function sendmsg(){
     console.log("in send");
     var msg = document.getElementById('msg').value;

@@ -21,14 +21,12 @@
 <div class="quiz-join-list">
 </div>
 
-<div class="start-cont" style="display: inline-flex; justify-content: space-evenly;">
-    <div class="start-time" style="margin-right: 30px;">
+<div class="start-cont" style="display: inline-flex; justify-content:space-around; width: 50%;">
+    <div class="start-time">
         <button class="btn-success btn" onclick="start()">Start Now</button>
     </div>
-    <div class="start" style="margin-left: 30px;">
-        <input type="number" id="hours" name="hours" min="0" max="23" style="width: 3em;" required><label id="tim">H</label>
-        <input type="number" id="minutes" name="minutes" min="0" max="59" style="width: 3em;" required><label id="tim">M</label>
-        <button class="btn btn-primary">Start on time</button>
+    <div class="start-time">
+        <button class="btn-danger btn" onclick="start()">Cancle</button>
     </div>
 </div>
 
@@ -56,6 +54,7 @@ function start(){
 
 socket.on('roomCreateMsg',(msg) =>{
     alert(msg);
+    alert("Note : You can not stop quiz once you started.");
 });
 
 socket.on("joinlistmem",(join) => {

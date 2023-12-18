@@ -89,12 +89,41 @@
         </ul>
         <a class="navbar-brand nav-usr" id="hello-user-link" href="#">Hello <%= name %></a>
         <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Quiz ID" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Join</button>
+          <input class="form-control mr-sm-2" type="text" id = "lv-id" placeholder="Quiz ID" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="chkQz()">Join Live Quiz</button>
         </form>
         <lable class="navbar-brand s-out" id = 's-out-bt'> Sign Out</lable>
       </div>
     </nav>
+
+    <script>
+      lin = '/check-live-quiz';
+      async function chkQz(){
+          var roomID = document.getElementById('lv-id').value;
+          try{
+              const resp = await fetch(lin,{
+              method:"POST",
+              headers: {
+                   'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({rid : roomID})
+          });
+
+          const info = await resp.json();
+
+          if(info.stat == true){
+              window.location.href = '/take-live-quiz';
+          }
+          else{
+              alert(info.msg);
+          }
+          }
+          catch(err){
+              console.log(err);
+          }
+          
+      }
+  </script>
 
     <form action="/logout" method="post" name="signout">
     </form>

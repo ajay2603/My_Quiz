@@ -474,6 +474,7 @@ app.post("/check-live-quiz", async (req, res) => {
 });
 
 app.get("/take-live-quiz", (req, res) => {
+ 
   const usr = req.cookies.userName;
   if (!usr) {
     res.redirect("/login");
@@ -606,18 +607,19 @@ io.on("connection", (socket) => {
       for (let j = 9; j >= 0; j--) {
         timerId = setTimeout(async () => {
           console.log(j);
+          io.to(qzid).emit("quesCd", j);
           if (j === 0) {
+            io.to(qzid).emit("reqAns");
             clearTimeout(timerId);
-            if (i + 1 < list.length) {
-              await evalWait(list, i + 1, qzid);
-            } else {
+            //if (i + 1 < list.length) {
+            await evalWait(list, i + 1, qzid);
+            /*}else {
               console.log("End of list");
-              io.to(qzid).emit("reqAns");
               await evalWait(list, i + 1, qzid);
               started.splice(started.indexOf(qzid), 1);
               console.log(quizMap);
-              quizMap.get(qzid).clear();
-            }
+              //quizMap.get(qzid).clear();
+            }*/
           }
         }, (10 - j) * 1000);
       }
@@ -634,10 +636,16 @@ io.on("connection", (socket) => {
       witId = setTimeout(async () => {
         console.log(j);
         if (j == 0) {
-          if (list[i]) {
+          if (list[i] && i < list.length) {
             timer(list, i, qzid);
           } else {
-            io.to(qzid).emit("finalRes");
+            io.to(qzid).emit("finalRes", Object.fromEntries(quizMap.get(qzid)));
+            console.log(quizMap.get(qzid));
+            console.log("final emited");
+            started.splice(started.indexOf(qzid), 1);
+            quizMap.get(qzid).clear();
+            console.log("Last done");
+            quizMap.delete(qzid);
           }
         }
       }, (5 - j) * 1000);
@@ -645,8 +653,10 @@ io.on("connection", (socket) => {
   }
 
   async function timer(list, i, qzid) {
-    console.log(quizMap);
-    io.to(qzid).emit("dispScore");
+    console.log("scores displaying");
+    console.log(quizMap.get(qzid));
+    const ma = Object.fromEntries(quizMap.get(qzid));
+    io.to(qzid).emit("dispScore", ma);
     let timerId;
     for (let j = 4; j >= 0; j--) {
       timerId = setTimeout(async () => {
@@ -672,14 +682,18 @@ io.on("connection", (socket) => {
 
       console.log(started);
       const list = quiz.questions;
+      io.to(qzid).emit("st");
       await timer(list, 0, qzid);
     }
   });
+
+  socket.on("cancle", async (qzid) => {});
 
   socket.on("joinroom", async (data) => {
     roomid = data.room;
     memberid = data.member;
     console.log(memberid);
+    console.log(roomid);
     console.log(" sid" + socket.id);
     console.log(io.sockets.adapter.rooms);
     console.log(IDMap.getAllKeys);
@@ -693,7 +707,7 @@ io.on("connection", (socket) => {
         socket.memberid = memberid;
         socket.join(roomid);
         if (!quizMap.get(roomid).has(memberid)) {
-          quizMap.get(roomid).set(memberid, { points: 0, time: -0.0001 });
+          quizMap.get(roomid).set(memberid, { points: 0, time: 0.0 });
         }
         IDMap.put(memberid, socket.id);
         roomSockAss.set(socket.id, roomid);
@@ -725,10 +739,14 @@ io.on("connection", (socket) => {
     io.to(rid).emit("recMsg", msg);
   });
 
-  socket.on("valques", async (qzid, memid, rslt) => {
+  socket.on("valques", (qzid, memid, rslt) => {
+    console.log(rslt);
     console.log("hi");
     var qs = curQues.get(qzid);
+    console.log(rslt);
     console.log(qs);
+    console.log("chk-err: ");
+    console.log(quizMap.get(qzid));
     var sc = qs.ans == rslt.opt ? 1 : 0;
     if (sc != 0) {
       quizMap.get(qzid).get(memid).points += sc;
@@ -736,8 +754,6 @@ io.on("connection", (socket) => {
     } else {
       quizMap.get(qzid).get(memid).time += 10;
     }
-
-    //console.log(quizMap);
   });
 });
 
@@ -890,4 +906,19 @@ app.post("/chk-submit", (req, res) => {
     .catch((err) => {
       res.json({ stat: false, msg: "Error in connecting database: " + err });
     });
+});
+
+app.post("/check-live-quiz-exist", async (req, res) => {
+  const qzid = req.body.qzid;
+  const quiz = await quizIDs
+    .findOne({ quizID: qzid, quizType: "live" })
+    .catch((err) => {
+      console.log(err);
+      res.json({ stat: false, msg: "Unable to fetch data" });
+    });
+  if (quiz) {
+    res.json({ stat: true });
+  } else {
+    res.json({ stat: false, msg: "Live Quiz not Found" });
+  }
 });
