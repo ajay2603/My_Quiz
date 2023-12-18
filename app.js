@@ -48,7 +48,7 @@ var dbConnector =
 const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
-  if (port == process.env.PORT)
+  if (port !== process.env.PORT)
     dbConnector = "mongodb://127.0.0.1:27017/usersDB";
   console.log(dbConnector);
   console.log("Server running on port 3000");
