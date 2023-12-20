@@ -43,7 +43,7 @@ const quizIDs = mongoose.model(
 );
 
 var dbConnector =
-  "mongodb+srv://ajay:ajay@cluster0.vs7hhac.mongodb.net/usersDB?retryWrites=true&w=majority";
+  "mongodb+srv://ajay_03:ajay@cluster0.dtjid1z.mongodb.net/?retryWrites=true&w=majority";
 
 const port = process.env.PORT || 3000;
 
