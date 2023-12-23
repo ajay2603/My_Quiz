@@ -43,11 +43,15 @@ const quizIDs = mongoose.model(
 );
 
 var dbConnector =
-  "mongodb+srv://ajay_03:ajay@cluster0.dtjid1z.mongodb.net/quizDB?retryWrites=true&w=majority";
+  " mongodb://127.0.0.1:27017/usersBD?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1";
 
 const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
+  if (port === process.env.PORT) {
+    dbConnector =
+      "mongodb+srv://ajay_03:ajay@cluster0.dtjid1z.mongodb.net/quizDB?retryWrites=true&w=majority";
+  }
   console.log("Server running on port 3000");
 });
 
