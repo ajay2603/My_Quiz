@@ -62,7 +62,7 @@ mongoose
   })
   .then(() => console.log("connected Succussfull"))
   .catch((err) =>
-    console.log("Error in connecting data Base\nSorry for in convience")
+    console.log("Error in connecting data Base")
   );
 
 app.use(cookieParser());
