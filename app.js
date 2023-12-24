@@ -43,7 +43,7 @@ const quizIDs = mongoose.model(
 );
 
 var dbConnector =
-  " mongodb://127.0.0.1:27017/usersBD?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1";
+  "mongodb://127.0.0.1:27017/usersBD?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1";
 
 const port = process.env.PORT || 3000;
 
