@@ -1,8 +1,10 @@
 {
+  "homepage": "http://ajay2603.github.io/my-quiz",
   "name": "my_quiz",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "deploy" : "gh-pages -d build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -21,5 +23,8 @@
     "socket.io-client": "^4.7.2",
     "yarn": "^1.22.21"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
+  }
 }
