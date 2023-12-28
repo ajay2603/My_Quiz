@@ -43,14 +43,11 @@ const quizIDs = mongoose.model(
   mongoose.Schema({}, { strict: false })
 );
 
-var dbConnector = process.env.DB_CONNECTOR_SERVER;
+var dbConnector = process.env.DB_CONNECTOR;
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 server.listen(port, () => {
-  if (port === 3000) {
-    dbConnector = process.env.DB_CONNECTOR_PC;
-  }
   console.log("Server running on port 3000");
 });
 
