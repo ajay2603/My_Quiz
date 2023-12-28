@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -42,15 +43,13 @@ const quizIDs = mongoose.model(
   mongoose.Schema({}, { strict: false })
 );
 
-var dbConnector =
-  "mongodb+srv://ajay_03:ajay@cluster0.dtjid1z.mongodb.net/quizDB?retryWrites=true&w=majority";
+var dbConnector = process.env.DB_CONNECTOR_SERVER;
 
 const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
   if (port === 3000) {
-    dbConnector =
-    "mongodb://127.0.0.1:27017/usersBD?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1";
+    dbConnector = process.env.DB_CONNECTOR_PC;
   }
   console.log("Server running on port 3000");
 });
@@ -61,9 +60,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log("connected Succussfull"))
-  .catch((err) =>
-    console.log(err)
-  );
+  .catch((err) => console.log(err));
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
